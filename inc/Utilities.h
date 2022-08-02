@@ -1,5 +1,5 @@
 #pragma once
 
-#include "com_ptr.hpp"
+#include "com_ptr.h"
 #include "config.h"
 #include "log.h"

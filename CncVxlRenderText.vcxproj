@@ -163,8 +163,9 @@
     <ClCompile Include="src\vxlfile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\com_ptr.hpp" />
+    <ClInclude Include="inc\com_ptr.h" />
     <ClInclude Include="inc\config.h" />
+    <ClInclude Include="inc\d3dx9.hpp" />
     <ClInclude Include="inc\ddraw_classes.h" />
     <ClInclude Include="inc\definitions.h" />
     <ClInclude Include="inc\fileformats.h" />

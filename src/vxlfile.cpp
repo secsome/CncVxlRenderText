@@ -287,9 +287,9 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 
 	D3DXMatrixTranslation(
 		&off,
-		static_cast<FLOAT>(F * 30.0 * D3DX_SQRT2 / 256.0),
-		static_cast<FLOAT>(- L * 30.0 * D3DX_SQRT2 / 256.0),
-		static_cast<FLOAT>(H * 30.0 * D3DX_SQRT2 / 256.0)
+		static_cast<float>(F * 30.0 * D3DX_SQRT2 / 256.0),
+		static_cast<float>(- L * 30.0 * D3DX_SQRT2 / 256.0),
+		static_cast<float>(H * 30.0 * D3DX_SQRT2 / 256.0)
 	);
 	D3DXMatrixRotationZ(&rotation, rotation_angle);
 

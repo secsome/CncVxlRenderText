@@ -19,14 +19,19 @@ void logger::write_line(const char* string)
 bool logger::prepare_log()
 {
     char filename[0x100]{ 0 };
-    SYSTEMTIME time;
 
-    if (!CreateDirectory(TEXT(".\\dlldebug"), nullptr) && GetLastError() != ERROR_ALREADY_EXISTS)
-        return false;
+    if (!std::filesystem::exists(".\\dlldebug"))
+    {
+        if (!std::filesystem::create_directory(".\\dlldebug"))
+            return false;
+    }
 
-    GetLocalTime(&time);
-    _snprintf_s(filename, _TRUNCATE, ".\\dlldebug\\Debug-%04u%02u%02u-%02u%02u%02u-%05u.LOG",
-        time.wYear, time.wMonth, time.wDay, time.wHour, time.wMinute, time.wSecond, time.wMilliseconds);
+    time_t rawtime;
+    tm info;
+    time(&rawtime);
+    localtime_s(&info, &rawtime);
+    _snprintf_s(filename, _TRUNCATE, ".\\dlldebug\\Debug-%04u%02u%02u-%02u%02u%02u.LOG",
+        1900 + info.tm_year, 1 + info.tm_mon, info.tm_mday, info.tm_hour, info.tm_min, info.tm_sec);
 
     open_log(filename);
 

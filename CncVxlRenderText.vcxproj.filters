@@ -47,7 +47,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\com_ptr.hpp">
+    <ClInclude Include="inc\com_ptr.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="inc\config.h">
@@ -90,6 +90,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="inc\vxlfile.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\d3dx9.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,7 +1,16 @@
 ﻿#include "fileformats.h"
 #include "Utilities.h"
 
-bool WINAPI DllMain(HINSTANCE base, DWORD reason, void* parameters)
+#ifdef WIN32
+
+#ifndef DLL_PROCESS_DETACH
+#define DLL_PROCESS_DETACH 0
+#endif
+#ifndef DLL_PROCESS_ATTACH
+#define DLL_PROCESS_ATTACH 1
+#endif
+
+bool WINAPI DllMain(void* base, uint32_t reason, void* parameters)
 {
 	if (reason == DLL_PROCESS_ATTACH)
 		thomas::logger::prepare_log();
@@ -10,6 +19,43 @@ bool WINAPI DllMain(HINSTANCE base, DWORD reason, void* parameters)
 
 	return true;
 }
+
+#endif
+
+#pragma pack(push, 2)
+typedef struct tagBITMAPFILEHEADER {
+	uint16_t bfType;
+	uint32_t bfSize;
+	uint16_t bfReserved1;
+	uint16_t bfReserved2;
+	uint32_t bfOffBits;
+} BITMAPFILEHEADER;
+#pragma pack(pop)
+
+typedef struct tagBITMAPINFOHEADER {
+	uint32_t biSize;
+	int32_t  biWidth;
+	int32_t  biHeight;
+	uint16_t biPlanes;
+	uint16_t biBitCount;
+	uint32_t biCompression;
+	uint32_t biSizeImage;
+	int32_t  biXPelsPerMeter;
+	int32_t  biYPelsPerMeter;
+	uint32_t biClrUsed;
+	uint32_t biClrImportant;
+} BITMAPINFOHEADER;
+
+typedef struct tagRGBQUAD {
+	byte rgbBlue;
+	byte rgbGreen;
+	byte rgbRed;
+	byte rgbReserved;
+} RGBQUAD;
+
+#ifndef BI_RGB
+#define BI_RGB 0L
+#endif
 
 bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, thomas::palette& palette, const size_t index = 0)
 {
@@ -48,7 +94,7 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	info_header.biPlanes = 1;
 	info_header.biBitCount = 8;
 	info_header.biCompression = BI_RGB;
-	info_header.biSizeImage = static_cast<DWORD>(stride * height);
+	info_header.biSizeImage = static_cast<uint32_t>(stride * height);
 
 	for (uint32_t i = 0; i <= 0xffu; i++)
 		color_index[i] = { palette[i].b,palette[i].g,palette[i].r,0 };
@@ -68,7 +114,7 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 
 	info_header.biWidth = swidth;
 	info_header.biHeight = -sheight;
-	info_header.biSizeImage = static_cast<DWORD>(sstride * sheight);
+	info_header.biSizeImage = static_cast<uint32_t>(sstride * sheight);
 
 	file.open(filename + "_shadow.bmp", std::ios::out | std::ios::binary);
 	file.write(reinterpret_cast<char*>(&file_header), sizeof file_header);
@@ -113,12 +159,15 @@ int main()
 		std::cout << "File is loaded.\n";
 
 	file.print_info();
-	if (!CreateDirectory(outdir, nullptr) && GetLastError() != ERROR_ALREADY_EXISTS)
+	if (!std::filesystem::exists(outdir))
 	{
-		std::cout << "Directory not created.\n";
-		return 1;
+		if (!std::filesystem::create_directory(outdir))
+		{
+			std::cout << "Directory not created.\n";
+			return 1;
+		}
 	}
-
+	
 	for (size_t i = 0; i < thomas::vxlfile::direction_count; i++)
 	{
 		save_cache_to_bitmap(outdir + std::string("out_") + std::to_string(i), file, palette, i);
