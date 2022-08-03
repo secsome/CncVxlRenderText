@@ -54,15 +54,15 @@ bool hvafile::load(const byte* buffer)
 	byte* bytes = const_cast<byte*>(buffer);
 	size_t current_offset = 0;
 	
-	memcpy(_signature, bytes, sizeof _signature);
-	bytes += sizeof _signature;
-	memcpy(&_framecount, bytes, sizeof _framecount);
-	bytes += sizeof _framecount;
-	memcpy(&_sectioncount, bytes, sizeof _sectioncount);
-	bytes += sizeof _sectioncount;
+	memcpy(_signature, bytes, sizeof(_signature));
+	bytes += sizeof(_signature);
+	memcpy(&_framecount, bytes, sizeof(_framecount));
+	bytes += sizeof(_framecount);
+	memcpy(&_sectioncount, bytes, sizeof(_sectioncount));
+	bytes += sizeof(_sectioncount);
 
 	_frame_matrices.resize(frame_count() * section_count());
-	memcpy(_frame_matrices.data(), bytes + section_count() * sizeof _signature, _frame_matrices.size() * sizeof game_matrix);
+	memcpy(_frame_matrices.data(), bytes + section_count() * sizeof(_signature), _frame_matrices.size() * sizeof(game_matrix));
 
 	return true;
 }
@@ -130,7 +130,7 @@ bool vxlfile::load(const byte* buffer)
 
 	byte* floating_cur = const_cast<byte*>(buffer);
 
-	memcpy(&_fileheader, floating_cur, sizeof _fileheader);
+	memcpy(&_fileheader, floating_cur, sizeof(_fileheader));
 	for (color& color : _fileheader.internal_palette)
 	{
 		color.r <<= 2;
@@ -143,11 +143,11 @@ bool vxlfile::load(const byte* buffer)
 	_headers.resize(limb_count);
 	_tailers.resize(limb_count);
 
-	floating_cur += sizeof _fileheader;
-	memcpy(_headers.data(), floating_cur, limb_count * sizeof vxl_limb_header);
+	floating_cur += sizeof(_fileheader);
+	memcpy(_headers.data(), floating_cur, limb_count * sizeof(vxl_limb_header));
 
-	floating_cur += limb_count * sizeof vxl_limb_header + _fileheader.body_size;
-	memcpy(_tailers.data(), floating_cur, limb_count * sizeof vxl_limb_tailer);
+	floating_cur += limb_count * sizeof(vxl_limb_header) + _fileheader.body_size;
+	memcpy(_tailers.data(), floating_cur, limb_count * sizeof(vxl_limb_tailer));
 
 	floating_cur -= _fileheader.body_size;
 	for (size_t i = 0; i < limb_count; i++)
@@ -165,8 +165,8 @@ bool vxlfile::load(const byte* buffer)
 		byte* span_start_data = floating_cur + current_tailer.span_start_offset;
 		byte* span_end_data = floating_cur + current_tailer.span_end_offset;
 
-		memcpy(current_body.span_starts.data(), span_start_data, span_count * sizeof uint32_t);
-		memcpy(current_body.span_ends.data(), span_end_data, span_count * sizeof uint32_t);
+		memcpy(current_body.span_starts.data(), span_start_data, span_count * sizeof(uint32_t));
+		memcpy(current_body.span_ends.data(), span_end_data, span_count * sizeof(uint32_t));
 
 		for (size_t n = 0; n < span_count; n++)
 		{
@@ -191,8 +191,8 @@ bool vxlfile::load(const byte* buffer)
 
 				if (voxel_count)
 				{
-					memcpy(&current_span.voxels[current_vox_idx], current_span_data, voxel_count * sizeof voxel);
-					current_span_data += voxel_count * sizeof voxel;
+					memcpy(&current_span.voxels[current_vox_idx], current_span_data, voxel_count * sizeof(voxel));
+					current_span_data += voxel_count * sizeof(voxel);
 				}
 
 				current_vox_idx += voxel_count;
@@ -296,8 +296,8 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 	if (!cache || !shadow_cache || !zbuffer)
 		return false;
 
-	memset(cache.get(), 0, sizeof cache_type);
-	memset(shadow_cache.get(), 0, sizeof cache_type);
+	memset(cache.get(), 0, sizeof(cache_type));
+	memset(shadow_cache.get(), 0, sizeof(cache_type));
 	for (size_t i = 0; i < buffer_height; i++)
 		for (size_t j = 0; j < buffer_width; j++)
 			zbuffer[i][j] = std::numeric_limits<float_t>::max();

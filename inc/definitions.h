@@ -15,6 +15,8 @@
 #include <unordered_map>
 
 #include <cassert>
+#include <cstring>
+#include <cmath>
 
 static_assert(sizeof(size_t) == 4, "This program can be only compiled under 32bit mode!");
 

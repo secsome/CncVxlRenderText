@@ -29,8 +29,8 @@ bool logger::prepare_log()
     time_t rawtime;
     tm info;
     time(&rawtime);
-    localtime_s(&info, &rawtime);
-    _snprintf_s(filename, _TRUNCATE, ".\\dlldebug\\Debug-%04u%02u%02u-%02u%02u%02u.LOG",
+    info = *localtime(&rawtime);
+    snprintf(filename, sizeof(filename), ".\\dlldebug\\Debug-%04u%02u%02u-%02u%02u%02u.LOG",
         1900 + info.tm_year, 1 + info.tm_mon, info.tm_mday, info.tm_hour, info.tm_min, info.tm_sec);
 
     open_log(filename);
@@ -82,7 +82,7 @@ void logger::log_write(const char* format, ...)
     va_list arguments;
     
     va_start(arguments, format);
-    vsprintf_s(buffer, sizeof buffer, format, arguments);
+    vsprintf(buffer, format, arguments);
     va_end(arguments);
 
     _logfile.write(buffer, strlen(buffer));

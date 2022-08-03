@@ -73,8 +73,8 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	BITMAPINFOHEADER info_header;
 	RGBQUAD color_index[256];
 
-	memset(&file_header, 0, sizeof file_header); 
-	memset(&info_header, 0, sizeof info_header);
+	memset(&file_header, 0, sizeof(file_header)); 
+	memset(&info_header, 0, sizeof(info_header));
 
 	int32_t width = cache.frame_bound.right - cache.frame_bound.left;
 	int32_t height = cache.frame_bound.bottom - cache.frame_bound.top;
@@ -84,11 +84,11 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	int64_t stride = ((width * 8 + 31) & ~31) >> 3;
 	int64_t sstride = ((swidth * 8 + 31) & ~31) >> 3;
 
-	file_header.bfSize = sizeof file_header;
+	file_header.bfSize = sizeof(file_header);
 	file_header.bfType = 'MB';
-	file_header.bfOffBits = sizeof file_header + sizeof info_header + sizeof color_index;
+	file_header.bfOffBits = sizeof(file_header) + sizeof(info_header) + sizeof(color_index);
 
-	info_header.biSize = sizeof info_header;
+	info_header.biSize = sizeof(info_header);
 	info_header.biWidth = width;
 	info_header.biHeight = -height;
 	info_header.biPlanes = 1;
@@ -99,9 +99,9 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	for (uint32_t i = 0; i <= 0xffu; i++)
 		color_index[i] = { palette[i].b,palette[i].g,palette[i].r,0 };
 
-	file.write(reinterpret_cast<char*>(&file_header), sizeof file_header);
-	file.write(reinterpret_cast<char*>(&info_header), sizeof info_header);
-	file.write(reinterpret_cast<char*>(color_index), sizeof color_index);
+	file.write(reinterpret_cast<char*>(&file_header), sizeof(file_header));
+	file.write(reinterpret_cast<char*>(&info_header), sizeof(info_header));
+	file.write(reinterpret_cast<char*>(color_index), sizeof(color_index));
 
 	for (uint32_t l = 0; l < static_cast<uint32_t>(height); l++)
 	{
@@ -117,9 +117,9 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	info_header.biSizeImage = static_cast<uint32_t>(sstride * sheight);
 
 	file.open(filename + "_shadow.bmp", std::ios::out | std::ios::binary);
-	file.write(reinterpret_cast<char*>(&file_header), sizeof file_header);
-	file.write(reinterpret_cast<char*>(&info_header), sizeof info_header);
-	file.write(reinterpret_cast<char*>(color_index), sizeof color_index);
+	file.write(reinterpret_cast<char*>(&file_header), sizeof(file_header));
+	file.write(reinterpret_cast<char*>(&info_header), sizeof(info_header));
+	file.write(reinterpret_cast<char*>(color_index), sizeof(color_index));
 
 	for (uint32_t l = 0; l < static_cast<uint32_t>(sheight); l++)
 	{

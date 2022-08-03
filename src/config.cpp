@@ -16,7 +16,7 @@ bool config::load(const std::string& filename)
         return false;
 
     std::string current_section;
-    while (file.getline(linebuff, sizeof linebuff))
+    while (file.getline(linebuff, sizeof(linebuff)))
     {
         if (is_annotation(linebuff) || is_empty(linebuff))
             continue;

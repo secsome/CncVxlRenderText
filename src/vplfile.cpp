@@ -27,7 +27,7 @@ vplfile::vplfile(const byte* buffer)
 void vplfile::clear()
 {
 	_sections.reset();
-	memset(&_internal_palette, 0, sizeof _internal_palette);
+	memset(&_internal_palette, 0, sizeof(_internal_palette));
 }
 
 bool vplfile::load(const std::string& filename)
@@ -52,8 +52,8 @@ bool vplfile::load(const byte* buffer)
 
 	clear();
 
-	memcpy(&_fileheader, buffer, sizeof _fileheader);
-	memcpy(&_internal_palette, buffer + sizeof _fileheader, sizeof _internal_palette);
+	memcpy(&_fileheader, buffer, sizeof(_fileheader));
+	memcpy(&_internal_palette, buffer + sizeof(_fileheader), sizeof(_internal_palette));
 
 	for (color& color : _internal_palette)
 	{
@@ -63,7 +63,7 @@ bool vplfile::load(const byte* buffer)
 	}
 
 	_sections.reset(new byte[_fileheader.section_count][256]);
-	memcpy(_sections.get(), buffer + sizeof _fileheader + sizeof _internal_palette, _fileheader.section_count * sizeof vpl_section);
+	memcpy(_sections.get(), buffer + sizeof(_fileheader) + sizeof(_internal_palette), _fileheader.section_count * sizeof(vpl_section));
 	
 	return true;
 }

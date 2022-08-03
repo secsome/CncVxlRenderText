@@ -10,7 +10,7 @@ palette::palette(const std::string& filename)
 bool palette::load(const std::string& filename)
 {
     const size_t valid_color_count = 256;
-    constexpr size_t valid_palsize = valid_color_count * sizeof color;
+    constexpr size_t valid_palsize = valid_color_count * sizeof(color);
 
     clear();
 

@@ -38,28 +38,28 @@ bool tmpfile::load(const std::string& filename)
 
     tmp_image_header temp;
 
-    memcpy_s(&_fileheader, sizeof _fileheader, buffer.data(), sizeof _fileheader);
+    memcpy(&_fileheader, buffer.data(), sizeof(_fileheader));
     _original_offsets.resize(block_count());
 
     size_t current_valid_index = 0;
-    memcpy_s(_original_offsets.data(), block_count() * sizeof uint32_t, &buffer[sizeof _fileheader], block_count() * sizeof uint32_t);
+    memcpy(_original_offsets.data(), &buffer[sizeof(_fileheader)], block_count() * sizeof(uint32_t));
     for (size_t offset : _original_offsets)
     {
-        const size_t header_size = sizeof tmp_image_header - sizeof std::vector<byte>;
+        const size_t header_size = sizeof(tmp_image_header) - sizeof(std::vector<byte>);
         if (offset)
         {
             //offset += reinterpret_cast<uint32_t>(buffer.data());
-            memcpy_s(&temp, header_size, &buffer[offset], header_size);
+            memcpy(&temp, &buffer[offset], header_size);
 
             temp.pixels.resize(tile_size() * 2);
-            memcpy_s(temp.pixels.data(), tile_size() * 2, &buffer[offset + header_size], tile_size() * 2);
+            memcpy(temp.pixels.data(), &buffer[offset + header_size], tile_size() * 2);
 
             _imageheaders.push_back(temp);
             if (has_extra(current_valid_index))
             {
                 auto& back = _imageheaders.back();
                 back.pixels.resize(tile_size() * 2 + extra_size(current_valid_index) * 2);
-                memcpy_s(&back.pixels[tile_size() * 2], extra_size(current_valid_index) * 2, &buffer[offset + header_size + tile_size() * 2], extra_size(current_valid_index) * 2);
+                memcpy(&back.pixels[tile_size() * 2], &buffer[offset + header_size + tile_size() * 2], extra_size(current_valid_index) * 2);
             }
 
             ++current_valid_index;
@@ -154,8 +154,8 @@ size_t tmpfile::calculate_file_size()
     if (!is_loaded())
         return 0;
 
-    const size_t header_size = sizeof tmp_image_header - sizeof std::vector<byte>;
-    size_t total_size = sizeof _fileheader + block_count() * sizeof uint32_t;
+    const size_t header_size = sizeof(tmp_image_header) - sizeof(std::vector<byte>);
+    size_t total_size = sizeof(_fileheader) + block_count() * sizeof(uint32_t);
     for (auto& block_data : _imageheaders)
         total_size += header_size + block_data.pixels.size();
 
@@ -173,22 +173,22 @@ bool tmpfile::save(const std::string& filename)
         return false;
 
     filebuffer.resize(calculate_file_size());
-    const size_t image_header_size = sizeof tmp_image_header - sizeof std::vector<byte>;
+    const size_t image_header_size = sizeof(tmp_image_header) - sizeof(std::vector<byte>);
 
-    memcpy_s(filebuffer.data(), sizeof _fileheader, &_fileheader, sizeof _fileheader);
-    memset(&filebuffer[sizeof _fileheader], 0, block_count() * sizeof uint32_t);
+    memcpy(filebuffer.data(), &_fileheader, sizeof(_fileheader));
+    memset(&filebuffer[sizeof(_fileheader)], 0, block_count() * sizeof(uint32_t));
 
-    uint32_t* offsets = reinterpret_cast<uint32_t*>(&filebuffer[sizeof _fileheader]);
-    uint32_t current_offset = sizeof _fileheader + block_count() * sizeof uint32_t;
+    uint32_t* offsets = reinterpret_cast<uint32_t*>(&filebuffer[sizeof(_fileheader)]);
+    uint32_t current_offset = sizeof(_fileheader) + block_count() * sizeof(uint32_t);
     size_t block_data_size = image_header_size + tile_size() * 2;
 
-    //memset(offsets, 0, block_count() * sizeof uint32_t);
-    memcpy_s(offsets, block_count() * sizeof uint32_t, _original_offsets.data(), block_count() * sizeof uint32_t);
+    //memset(offsets, 0, block_count() * sizeof(uint32_t));
+    memcpy(offsets, _original_offsets.data(), block_count() * sizeof(uint32_t));
     for (size_t i = 0; i < valid_block_count(); i++)
     {
         auto& block_data = _imageheaders[i];
-        memcpy_s(&filebuffer[current_offset], image_header_size, &block_data, image_header_size);
-        memcpy_s(&filebuffer[current_offset + image_header_size], block_data.pixels.size(), block_data.pixels.data(), block_data.pixels.size());
+        memcpy(&filebuffer[current_offset], &block_data, image_header_size);
+        memcpy(&filebuffer[current_offset + image_header_size], block_data.pixels.data(), block_data.pixels.size());
 
         //offsets[i] = current_offset;
         current_offset += image_header_size + block_data.pixels.size();

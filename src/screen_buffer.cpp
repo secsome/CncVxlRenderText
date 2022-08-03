@@ -26,7 +26,7 @@ bool screen_buffer::allocate(const int32_t x, const int32_t y, const size_t widt
     _start = buffer_pointer(new element_type[width * height]);
     if (_start)
     {
-        _buffer_size = width * height * sizeof element_type;
+        _buffer_size = width * height * sizeof(element_type);
         _bound = { x,y,width,height };
 
         return true;
