@@ -16,6 +16,8 @@
 
 #include <cassert>
 
+static_assert(sizeof(size_t) == 4, "This program can be only compiled under 32bit mode!");
+
 #ifndef WINAPI
 
 #ifdef _MSC_VER

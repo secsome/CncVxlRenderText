@@ -136,9 +136,9 @@ int main()
 {
 	const std::string indir = "E:\\";
 	const std::string vplname = "voxels.vpl";
-	std::string palname = "unittem.pal";
-	std::string vxlname = "bfrt.vxl";
-	std::string hvaname = "bfrt.hva";
+	const std::string palname = "unittem.pal";
+	const std::string vxlname = "bfrt.vxl";
+	const std::string hvaname = "bfrt.hva";
 	const char* outdir = "E:\\out_shot\\";
 
 	thomas::vxlfile file;
