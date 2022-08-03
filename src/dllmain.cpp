@@ -132,46 +132,84 @@ bool save_cache_to_bitmap(const std::string& filename, thomas::vxlfile& vxl, tho
 	return true;
 }
 
-int main()
+int main(int argc, const char** argv)
 {
-	const std::string indir = "E:\\";
-	const std::string vplname = "voxels.vpl";
-	const std::string palname = "unittem.pal";
-	const std::string vxlname = "bfrt.vxl";
-	const std::string hvaname = "bfrt.hva";
-	const char* outdir = "E:\\out_shot\\";
+	using namespace thomas;
 
-	thomas::vxlfile file;
-	thomas::palette palette(indir + palname);
+	if (argc != 6 && argc != 7)
+	{
+		printf("Usage: %s <VPLPath> <PalPath> <VxlPath> <HvaPath> <OutPath> [DirCount]\n", argv[0]);
+		return 0;
+	}
 	
-	if (thomas::vplfile::load_global(indir + vplname))
+	const std::string vplname = argv[1];
+	const std::string palname = argv[2];
+	const std::string vxlname = argv[3];
+	const std::string hvaname = argv[4];
+	const char* outdir = argv[5];
+	if (argc == 7)
+		vxlfile::direction_count = atoi(argv[6]);
+
+	vxlfile file;
+	palette palette(palname);
+	
+	if (vplfile::load_global(vplname))
 		std::cout << "Vpl is loaded.\n";
-
-	file.load(indir + vxlname);
-	file.load_hva(indir + hvaname);
-
-	if (file.prepare_all_cache(thomas::vplfile::global, 0, 0, 0))
-		std::cout << "All caches engaged.\n";
-
-	if (!file.is_loaded())
-		std::cout << "File is not loaded.\n";
 	else
+	{
+		std::cout << "Vpl is not loaded.\n";
+		return 1;
+	}
+
+	if (file.load(vxlname))
+		std::cout << "Vxl is loaded.\n";
+	else
+	{
+		std::cout << "Vxl is not loaded.\n";
+		return 1;
+	}
+
+	if (file.load_hva(hvaname))
+		std::cout << "Hva is loaded.\n";
+	else
+	{
+		std::cout << "Hva is not loaded.\n";
+		return 1;
+	}
+
+	if (file.prepare_all_cache(vplfile::global, 0, 0, 0))
+		std::cout << "All caches engaged.\n";
+	else
+	{
+		std::cout << "Not all caches engaged.\n";
+		return 1;
+	}
+
+	if (file.is_loaded())
 		std::cout << "File is loaded.\n";
+	else
+	{
+		std::cout << "File is not loaded.\n";
+		return 1;
+	}
 
 	file.print_info();
 	if (!std::filesystem::exists(outdir))
 	{
 		if (!std::filesystem::create_directory(outdir))
 		{
-			std::cout << "Directory not created.\n";
+			std::cout << "Directory is not created.\n";
 			return 1;
 		}
 	}
 	
-	for (size_t i = 0; i < thomas::vxlfile::direction_count; i++)
-	{
-		save_cache_to_bitmap(outdir + std::string("out_") + std::to_string(i), file, palette, i);
-	}
+	std::filesystem::current_path(outdir);
+	std::cout << "Current path set to " << std::filesystem::current_path() << std::endl;
+
+	for (size_t i = 0; i < vxlfile::direction_count; i++)
+		save_cache_to_bitmap(std::string("out_") + std::to_string(i), file, palette, i);
+
+	std::cout << vxlfile::direction_count << " bitmaps saved.\n";
 
 	return 0;
 }

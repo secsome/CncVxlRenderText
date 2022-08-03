@@ -66,7 +66,7 @@ struct vxl_limb_tailer
 	uint32_t span_start_offset;
 	uint32_t span_end_offset;
 	uint32_t span_data_offset;
-	float_t scale;
+	float32_t scale;
 	game_matrix matrix;
 	vector3<float> min_bounds;
 	vector3<float> max_bounds;
@@ -107,13 +107,13 @@ class vxlfile
 public:
 	static constexpr size_t buffer_width = 256u;
 	static constexpr size_t buffer_height = 256u;
-	static constexpr size_t direction_count = 32u; // modify this constant to generate all facings
+	static size_t direction_count; // modify this constant to generate all facings
 	static const d3dvector reversed_light;
 
 	using cache_type = byte[buffer_height][buffer_width];
-	using zbuffer_type = float_t[buffer_height][buffer_width];
+	using zbuffer_type = float32_t[buffer_height][buffer_width];
 	using cache_ptr = byte[][buffer_width];
-	using zbuffer_ptr = float_t[][buffer_width];
+	using zbuffer_ptr = float32_t[][buffer_width];
 	using cache_pointer = std::shared_ptr<cache_ptr>;
 	using zbuffer_pointer = std::shared_ptr<zbuffer_ptr>;
 	using cache_frame = std::shared_ptr<byte[]>;

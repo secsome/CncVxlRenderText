@@ -4,6 +4,8 @@
 
 CLASSES_START
 
+size_t vxlfile::direction_count = 32u;
+
 const d3dvector vxlfile::reversed_light = { 0.0f,1.0f,0.0f };
 
 hvafile::hvafile() :_signature(),
@@ -280,10 +282,10 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 
 	cache_pointer cache(new byte[buffer_height][buffer_width]);
 	cache_pointer shadow_cache(new byte[buffer_height][buffer_width]);
-	zbuffer_pointer zbuffer(new float_t[buffer_height][buffer_width]);
+	zbuffer_pointer zbuffer(new float32_t[buffer_height][buffer_width]);
 	d3dmatrix off;
 	d3dmatrix rotation;
-	float_t rotation_angle = static_cast<float_t>(diridx * D3DX_PI * 2.0f / direction_count);
+	float32_t rotation_angle = static_cast<float32_t>(diridx * D3DX_PI * 2.0f / direction_count);
 
 	D3DXMatrixTranslation(
 		&off,
@@ -300,7 +302,7 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 	memset(shadow_cache.get(), 0, sizeof(cache_type));
 	for (size_t i = 0; i < buffer_height; i++)
 		for (size_t j = 0; j < buffer_width; j++)
-			zbuffer[i][j] = std::numeric_limits<float_t>::max();
+			zbuffer[i][j] = std::numeric_limits<float32_t>::max();
 	
 	int32_t xl, xh, yl, yh;
 	int32_t sxl, sxh, syl, syh;
@@ -325,14 +327,14 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 			continue;
 
 		d3dvector scales;
-		vector3<float_t> min_bound = current_tailer.min_bounds;
-		vector3<float_t> max_bound = current_tailer.max_bounds;
+		vector3<float32_t> min_bound = current_tailer.min_bounds;
+		vector3<float32_t> max_bound = current_tailer.max_bounds;
 
 		scales.x = (max_bound.x() - min_bound.x()) / current_tailer.xsize;
 		scales.y = (max_bound.y() - min_bound.y()) / current_tailer.ysize;
 		scales.z = (max_bound.z() - min_bound.z()) / current_tailer.zsize;
 
-		d3dmatrix origin = current_tailer.matrix.d3d_matrix(current_tailer.scale);
+		// d3dmatrix origin = current_tailer.matrix.d3d_matrix(current_tailer.scale);
 		d3dmatrix transform = _associated_hva->matrix(0, l).integrate_matrix(scales, current_tailer.scale);
 		d3dmatrix trans_center = math::translation_from(min_bound);
 		d3dmatrix scale;
@@ -357,7 +359,7 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 			int32_t sx = static_cast<int32_t>(shadow_pos.x);
 			int32_t sy = static_cast<int32_t>(shadow_pos.y);
 
-			float_t light_angle = std::acos((D3DXVec3Dot(&vxlfile::reversed_light, &normal_vec)) / 
+			float32_t light_angle = std::acos((D3DXVec3Dot(&vxlfile::reversed_light, &normal_vec)) /
 				D3DXVec3Length(&vxlfile::reversed_light) / D3DXVec3Length(&normal_vec));
 
 			byte color = 0;
@@ -420,7 +422,7 @@ bool vxlfile::prepare_single_dir_cache(const size_t diridx, vplfile& vplfile, co
 
 	_shadow_cache[diridx].cache = clip_shadow;
 	_shadow_cache[diridx].frame_bound = { sxl,syl,sxh + 1,syh + 1 };
-	
+
 	return true;
 }
 

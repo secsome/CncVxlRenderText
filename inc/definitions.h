@@ -20,6 +20,9 @@
 
 static_assert(sizeof(size_t) == 4, "This program can be only compiled under 32bit mode!");
 
+// Ensure sizeof(float_t) = 4
+using float32_t = float;
+
 #ifndef WINAPI
 
 #ifdef _MSC_VER

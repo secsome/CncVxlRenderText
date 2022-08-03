@@ -337,7 +337,7 @@ public:
 
 	bool operator!=(const vector& right)
 	{
-		return !*this == right;
+		return !(*this == right);
 	}
 
 	type& operator[](size_t idx)
@@ -593,7 +593,7 @@ struct game_matrix
 namespace math
 {
 	d3dvector vector_from(vector3<int>&& right);
-	d3dmatrix translation_from(vector3<float_t> right);
+	d3dmatrix translation_from(vector3<float32_t> right);
 	d3dvector fructum_transformation(const rect& visual, const d3dvector& model_coords);
 };
 

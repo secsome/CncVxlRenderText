@@ -513,7 +513,7 @@ namespace math
         };
     }
 
-    d3dmatrix translation_from(vector3<float_t> right)
+    d3dmatrix translation_from(vector3<float32_t> right)
     {
         D3DXMATRIX translation, identity;
 
@@ -525,9 +525,9 @@ namespace math
 
     d3dvector fructum_transformation(const rect& visual, const d3dvector& model_coords)
     {
-        float_t w = static_cast<float_t>(visual.right - visual.left);
-        float_t h = static_cast<float_t>(visual.bottom - visual.top);
-        const float_t f = 5000.0f;
+        float32_t w = static_cast<float32_t>(visual.right - visual.left);
+        float32_t h = static_cast<float32_t>(visual.bottom - visual.top);
+        const float32_t f = 5000.0f;
 
         d3dvector result;
 
