@@ -12,10 +12,10 @@
 
 bool WINAPI DllMain(void* base, uint32_t reason, void* parameters)
 {
-	if (reason == DLL_PROCESS_ATTACH)
-		thomas::logger::prepare_log();
-	else if (reason == DLL_PROCESS_DETACH)
-		thomas::logger::close_log();
+	// if (reason == DLL_PROCESS_ATTACH)
+	// 	thomas::logger::prepare_log();
+	// else if (reason == DLL_PROCESS_DETACH)
+	// 	thomas::logger::close_log();
 
 	return true;
 }
