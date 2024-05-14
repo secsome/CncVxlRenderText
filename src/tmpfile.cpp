@@ -179,7 +179,7 @@ bool tmpfile::save(const std::string& filename)
     memset(&filebuffer[sizeof(_fileheader)], 0, block_count() * sizeof(uint32_t));
 
     uint32_t* offsets = reinterpret_cast<uint32_t*>(&filebuffer[sizeof(_fileheader)]);
-    uint32_t current_offset = sizeof(_fileheader) + block_count() * sizeof(uint32_t);
+    size_t current_offset = sizeof(_fileheader) + block_count() * sizeof(uint32_t);
     size_t block_data_size = image_header_size + tile_size() * 2;
 
     //memset(offsets, 0, block_count() * sizeof(uint32_t));

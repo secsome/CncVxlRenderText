@@ -18,10 +18,10 @@
 #include <cstring>
 #include <cmath>
 
-static_assert(sizeof(size_t) == 4, "This program can be only compiled under 32bit mode!");
 
 // Ensure sizeof(float_t) = 4
 using float32_t = float;
+static_assert(sizeof(float32_t) == 4, "This program can be only compiled under current architecture!");
 
 #ifndef WINAPI
 

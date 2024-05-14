@@ -34,7 +34,7 @@ extern "C"
 
 	unsigned int WINAPI CncImgGetMaxFacing()
 	{
-		return thomas::vxlfile::direction_count;
+		return static_cast<unsigned int>(thomas::vxlfile::direction_count);
 	}
 
 	bool WINAPI CncImgLoadVPLFile(const unsigned char* pBuffer)
