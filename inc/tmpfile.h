@@ -16,10 +16,10 @@ enum ramp :char
 
 struct tmp_file_header
 {
-	size_t xblocks;
-	size_t yblocks;
-	size_t block_width;
-	size_t block_height;
+	uint32_t xblocks;
+	uint32_t yblocks;
+	uint32_t block_width;
+	uint32_t block_height;
 };
 
 struct tmp_image_header
@@ -29,8 +29,8 @@ struct tmp_image_header
 	uint32_t _reserved_1[3];
 	int32_t x_extra;
 	int32_t y_extra;
-	size_t ex_width;
-	size_t ex_height;
+	uint32_t ex_width;
+	uint32_t ex_height;
 	uint32_t ex_flags;
 	byte height;
 	byte type;

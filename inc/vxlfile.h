@@ -38,9 +38,9 @@ struct vxl_file_header
 {
 	char signature[0x10];
 	uint32_t _reserved;
-	size_t limb_count;
-	size_t _limb_count;
-	size_t body_size;
+	uint32_t limb_count;
+	uint32_t _limb_count;
+	uint32_t body_size;
 	uint8_t remap_start_index;
 	uint8_t remap_end_index;
 	color internal_palette[0x100];
