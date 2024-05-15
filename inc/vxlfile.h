@@ -28,8 +28,8 @@ public:
 
 private:
 	char _signature[0x10];
-	size_t _framecount;
-	size_t _sectioncount;
+	uint32_t _framecount;
+	uint32_t _sectioncount;
 	std::vector<game_matrix> _frame_matrices;
 };
 
@@ -38,9 +38,9 @@ struct vxl_file_header
 {
 	char signature[0x10];
 	uint32_t _reserved;
-	size_t limb_count;
-	size_t _limb_count;
-	size_t body_size;
+	uint32_t limb_count;
+	uint32_t _limb_count;
+	uint32_t body_size;
 	uint8_t remap_start_index;
 	uint8_t remap_end_index;
 	color internal_palette[0x100];
@@ -53,6 +53,7 @@ struct voxel
 	byte normal = 0;
 };
 
+#pragma pack(push, 4)
 struct vxl_limb_header
 {
 	char name[16];
@@ -75,6 +76,7 @@ struct vxl_limb_tailer
 	uint8_t zsize;
 	normal_type normal_type;
 };
+#pragma pack(pop)
 
 struct span_data
 {

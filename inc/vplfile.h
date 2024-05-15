@@ -3,13 +3,15 @@
 
 CLASSES_START
 
+#pragma pack(push, 4)
 struct vpl_header
 {
 	uint32_t remap_start;
 	uint32_t remap_end;
-	size_t section_count;
+	uint32_t section_count;
 	uint32_t _reserved;
 };
+#pragma pack(pop)
 
 class vplfile
 {
